@@ -1,0 +1,1 @@
+export { moviesNowPlayingUseCase } from "./movies/now-playing.use-case";
