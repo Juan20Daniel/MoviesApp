@@ -1,11 +1,16 @@
-import { useEffect, useState } from "react"
-import type { Movie } from "../../core/entities/movie.entity";
-import { moviesNowPlayingUseCase } from "../../core/use-cases";
+import { useEffect, useState } from "react";
 import { movieDBFecher } from "../../config/adapters/movieDB.adapter";
-
+import { moviesNowPlayingUseCase } from "../../core/use-cases";
+import { moviesPopularUseCase } from '../../core/use-cases';
+import { moviesTopRatedUseCase } from "../../core/use-cases";
+import { moviesUpcomingUseCase } from "../../core/use-cases";
+import type { Movie } from "../../core/entities/movie.entity";
 
 export const useMovies = () => {
     const [ nowPlaying, setNowPlaying ] = useState<Movie[]>([]);
+    const [ popular, setPopular ] = useState<Movie[]>([]);
+    const [ topRated, setTopRated ] = useState<Movie[]>([]);
+    const [ upcoming, setUpcoming ] = useState<Movie[]>([]);
     const [ isLoading, setIsLoading ] = useState<boolean>(true);
 
     useEffect(() => {
@@ -13,11 +18,30 @@ export const useMovies = () => {
     },[]);
     
     const initialLoader = async () => {
-        const nowPlayingMovies = await moviesNowPlayingUseCase(movieDBFecher);
+        const [ 
+            nowPlayingMovies, 
+            popularMovies,
+            topRatedMovies,
+            upcomingMovies
+        ] = await Promise.all([
+            moviesNowPlayingUseCase(movieDBFecher),
+            moviesPopularUseCase(movieDBFecher),
+            moviesTopRatedUseCase(movieDBFecher),
+            moviesUpcomingUseCase(movieDBFecher),
+        ]);
+        setNowPlaying(nowPlayingMovies);
+        setPopular(popularMovies);
+        setTopRated(topRatedMovies);
+        setUpcoming(upcomingMovies);
+
+        setIsLoading(false);
     }
 
     return {
         nowPlaying,
+        popular,
+        topRated,
+        upcoming,
         isLoading
     }
 }

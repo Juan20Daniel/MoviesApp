@@ -1,13 +1,27 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import { useMovies } from '../../hooks/useMovies';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { PosterCarousel } from '../../components';
+
 
 const HomeScreen = () => {
-    const {} = useMovies();
+    const { top } = useSafeAreaInsets();
+    const { isLoading, nowPlaying } = useMovies();
+
+    if(isLoading) {
+        return (
+            <View style={{marginTop: top+20}}>
+                <Text>Cargando...</Text>
+            </View>
+        )
+    }
     return (
-        <View>
-            <Text>ProfileScree</Text>
-        </View>
+        <ScrollView>
+            <View style={{marginTop:top+20}}> 
+                <PosterCarousel movies={nowPlaying} />
+            </View>
+        </ScrollView>
     )
 }
 

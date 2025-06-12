@@ -1,0 +1,1 @@
+export { PosterCarousel } from "./movies/PosterCarousel";
