@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { Movie } from '../../../core/entities/movie.entity';
 import { MoviePoster } from './MoviePoster';
 
@@ -7,22 +7,34 @@ interface Props {
     height?: number;
 }
 
-export const PosterCarousel = ({ movies, height=240 }:Props) => {
-  return (
-    <View style={{height}}>
-        <ScrollView 
-            horizontal
-            showsHorizontalScrollIndicator={false}
-        >
-            <View style={{flexDirection:'row', gap: 10, marginHorizontal: 10}}>
-                {movies.map(movie => (
-                    <MoviePoster 
-                        key={movie.id}
-                        movie={movie}
-                    />
-                ))}
-            </View>
-        </ScrollView>
-    </View>
-  )
+export const PosterCarousel = ({ movies, height=270 }:Props) => {
+    return (
+        <View style={{height}}>
+            <Text style={styles.title}>Posters</Text>
+            <ScrollView 
+                horizontal
+                showsHorizontalScrollIndicator={false}
+            >
+                <View style={styles.boxMovies}>
+                    {movies.map((movie, index) => (
+                        <MoviePoster
+                            marginLeft={!index}
+                            key={movie.id}
+                            movie={movie}
+                        />
+                    ))}
+                </View>
+            </ScrollView>
+        </View>
+    );
 }
+
+const styles = StyleSheet.create({
+    title: {
+        marginLeft: 10, 
+        fontSize: 16
+    },
+    boxMovies: {
+        flexDirection:'row', 
+    }
+})
