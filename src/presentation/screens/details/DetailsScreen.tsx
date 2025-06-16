@@ -1,18 +1,34 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import React from 'react';
-import { Text, View } from 'react-native';
+import { ScrollView, StatusBar, Text, View } from 'react-native';
 import { RootStackParamList } from '../../navigations/StackNavigator';
+import { useMovie } from '../../hooks/useMovie';
+import { MovieHeader } from '../../components/movie/MobieHeader';
+import { MovieDetails } from '../../components/movie/MovieDetails';
 
 interface Props extends StackScreenProps<RootStackParamList, 'Details'> {}
 
 const DetaileScreen = ({route}:Props) => {
     const { movieId } = route.params;
-    // const { movieId } = useRoute().params;
-    console.log(movieId);
+    const { isLoading, movie, cast } = useMovie(movieId);
+    
+    if(isLoading) {
+        return <Text>Cargando...</Text>
+    }
+
     return (
-        <View>
-            <Text>DetaileScreen</Text>
-        </View>
+        <ScrollView>
+            <StatusBar barStyle='light-content' />
+            <MovieHeader
+                poster={movie?.poster!}
+                originalTitle={movie?.originalTitle!}
+                title={movie?.title!}
+            />
+            <MovieDetails 
+                movie={movie!}
+                cast={cast!}
+            />
+        </ScrollView>
     )
 }
 

@@ -17,6 +17,7 @@ export const useMovies = () => {
 
     useEffect(() => {
         initialLoader();
+        console.log('exce')
     },[]);
     
     const initialLoader = async () => {
